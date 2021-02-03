@@ -1,10 +1,11 @@
 require("dotenv").config();
 const express = require("express");
 const db = require("./db");
-const morgan = require("morgan");
+const cors = require("cors");
 const app = express();
 
 //MIDDLEWARE
+app.use(cors({origin: "http://34.226.136.222:3000"}));
 app.use(express.json());
 
 // GET ALL RESTAURANTS
