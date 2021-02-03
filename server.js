@@ -11,7 +11,6 @@ app.use(express.json());
 app.get("/api/v1/restaurants", async (request, response) => {
    try{
       const results = await db.query("SELECT * FROM restaurants");
-      console.log(results);
       response.json({
          status: "success",
          results: results.rows.length,
@@ -22,18 +21,22 @@ app.get("/api/v1/restaurants", async (request, response) => {
    } catch (e) {
       console.log(e);
    }
-
 });
 
 //GET A RESTAURANT
-app.get("/api/v1/restaurants/:id", (request, response) => {
-   console.log(request.params);
-   response.status(200).json({
-      status: "success",
-      data: {
-         restaurant: "some restaurant"
-      }
-   });
+app.get("/api/v1/restaurants/:id", async (request, response) => {
+   try {
+      const result = await db.query("SELECT * FROM restaurants WHERE id = $1", [request.params.id]);
+      response.status(200).json({
+         status: "success",
+         results: result.rows.length,
+         data: {
+            restaurants: result.rows
+         }
+      });
+   } catch (e) {
+      console.log(e);
+   }
 });
 
 //CREATE A RESTAURANT
