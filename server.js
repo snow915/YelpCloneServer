@@ -8,13 +8,21 @@ const app = express();
 app.use(express.json());
 
 // GET ALL RESTAURANTS
-app.get("/api/v1/restaaurants", async (request, response) => {
-   const results = await db.query("SELECT * FROM restaurants");
-   console.log(results);
-   response.json({
-      status: "success",
-      restaurant: "Carls JR"
-   });
+app.get("/api/v1/restaurants", async (request, response) => {
+   try{
+      const results = await db.query("SELECT * FROM restaurants");
+      console.log(results);
+      response.json({
+         status: "success",
+         results: results.rows.length,
+         data: {
+            restaurants: results.rows
+         }
+      });
+   } catch (e) {
+      console.log(e);
+   }
+
 });
 
 //GET A RESTAURANT
